@@ -1,4 +1,5 @@
 # ASL Alphabet Detection and Identification using YOLOv8
+![The word 'HELLO' in ASL](https://github.com/sparsh-binj/ASL-recognition-dataset/blob/main/img/hello.jpg?raw=true)
 
 ## Overview
 
@@ -25,13 +26,37 @@ We used this dataset to train the YOLOv8 model. The model performed well at dete
 
 ## Results
 
-Once the model is trained, you can monitor its performance by testing on different videos or webcam input. Check for areas where the model may not perform well, such as signs made closer to the camera or letters like "M" and "N" that historically have lower detection accuracy. The model performs well in identifying signs, especially when the signer is further from the camera. However, it struggles with signs made by signers closer to the camera. This discrepancy likely results from the dataset containing more images of signers farther away, making the model biased toward that setup. Additionally, some extracted frames included too much of the signer’s face within the ROI box or signs that were unclear, further affecting performance.
+#### Model 1
 
-## Limitations
+[![Video](https://img.youtube.com/vi/mSuA84eaCWk/maxresdefault.jpg)](https://www.youtube.com/watch?v=)
 
-- **Dataset Bias**: The dataset was biased toward signers at a distance from the camera, making the model less effective for signers closer to the camera.
-- **Quality of Frames**: Some frames extracted from videos were unclear or included too much of the signer’s face, affecting model accuracy.
-- **Sign Detection Performance**: Some signs, such as "M" and "N," were not accurately identified, possibly due to insufficient variation in the dataset.
+We decided to train YOLOv8 on an existing dataset using a 70-20-10 split. The results were quite underwhelming. It didn’t recognise most signs correctly and for the ones it was correct, the confidence was around 65%. This is not surprising since the dataset includes signs from the signer’s perspective and not from the viewer’s perspective. Further, all of the pictures are of David Lee and his hand in the same environment making the model highly biased.
+
+The limitations of the previous dataset was that it did not include different signers, some of the training data was either incorrectly signed or the pictures were from the signer’s perspective, and the same background was used for all pictures.
+
+#### Model 2
+
+We decided then to look for youtube videos that we could then break it down to a series of frames (using 2fps) and then annotate those to create our dataset. The idea behind this was to create a dataset that not only had correct signs from the viewer’s perspective but also a variety of signers with varying backgrounds which would make our model more accurate and less biased.
+
+When we trained this model, we also included augmentations for horizontal flip (to include left handed signers), rotation and shearing by +- 5 degrees to make the prediction invariant to minute changes in the hand position.
+
+[![Video](https://img.youtube.com/vi/kXcpHrirTx8/maxresdefault.jpg)](https://www.youtube.com/watch?v=kXcpHrirTx8) 
+
+This new model gave superior results to the previous model but it has its limitations as well (as can be seen in the video). The model does very well in identifying signs if they’re placed a bit further away from the camera than if they’re placed closer. This result made sense when we looked at our dataset again and most of the dataset were pictures that resembled the setup that Duncan had with the webcam, i.e. located a bit further away from the webcam. Hence, the signs made by Duncan were more accurately identified than the signs made by Sparsh who was located closer to the webcam. Another limitation of this model was that we could not find very clear and sharp images for many of the signs since a lot of the frames we extracted from the videos either included much of the signer’s face within the ROI box or their signs were not properly angled towards the camera.
+
+#### Model 3 (Best)
+
+We created our own dataset was to generate pictures that had the following features:
+
+- Correct signs and from the perspective of the viewer.
+- 7 different signers in varying lighting and background settings.
+- Varying camera angles with respect to the signer.
+- A mix of pictures that are close to the camera as well as further away.
+
+[![Video](https://img.youtube.com/vi/cV5y8b68DJ8/maxresdefault.jpg)](https://www.youtube.com/watch?v=cV5y8b68DJ8) 
+
+The idea behind this was to create a dataset that more closely resembles the environment in which an ASL recognition model might be deployed. We used our dataset to train the YOLOv8 model and, as you can see from the video, it does well for signs that are at a varying distance from the camera and is pretty accurate across all categories. There are a few that don’t quite work well like the letters “J” and “N” but that can be improved.
+
 
 ## Future Works
 
