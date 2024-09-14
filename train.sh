@@ -1,0 +1,1 @@
+yolo task=detect mode=train model=yolov8s.pt data=c:/Users/wenyudu/PycharmProjects/asl-recognition/ASL-hands-finder-4/data.yaml epochs=100 imgsz=640 plots=True device=0yolo task=detect mode=train model=yolov8s.pt data=American-Sign-Language-Letters-1\\data.yaml epochs=100 imgsz=640 device=0
